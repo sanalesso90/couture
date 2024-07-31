@@ -1,15 +1,31 @@
-// script.js
 document.addEventListener('DOMContentLoaded', function() {
     const carouselItems = document.querySelectorAll('.carousel-item');
     let currentItem = 0;
+    let isTransitioning = false;
 
     function showNextItem() {
-        carouselItems[currentItem].classList.remove('active');
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        const current = carouselItems[currentItem];
         currentItem = (currentItem + 1) % carouselItems.length;
-        carouselItems[currentItem].classList.add('active');
+        const next = carouselItems[currentItem];
+
+        // Start transition
+        next.classList.add('next');
+        
+        setTimeout(() => {
+            current.classList.remove('active');
+            next.classList.add('active');
+            next.classList.remove('next');
+            
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 50);
+        }, 50);
     }
 
-    setInterval(showNextItem, 4000); // Change image every 4 seconds
+    setInterval(showNextItem, 4000); // Change image every 5 seconds
 
     // Burger menu functionality
     const burger = document.querySelector('.burger');
